@@ -39,6 +39,10 @@ const startServer = async () => {
         fastify.register(require('./routes/terms'));
         fastify.register(require('./routes/products'));
 
+        fastify.get('/', async (req, res) => {
+            return { message: "Backend is live and working!" };
+        });
+
         // Connect to the database
         await sequilize.authenticate();
         console.log("Database is connected.");
