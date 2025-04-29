@@ -6,7 +6,7 @@ require('dotenv').config();
 const fastifyCors = require('@fastify/cors');
 const fastifyHelmet = require('@fastify/helmet');
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3004;
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS.split(',');
 
 const startServer = async () => {
@@ -46,8 +46,13 @@ const startServer = async () => {
         console.log("Tables synced");
 
         // Start the server
-        fastify.listen({ port: PORT });
-        console.log(`Server running at port ${PORT}`);
+        fastify.listen({ port: PORT,  host: '0.0.0.0' }, (err, address) => {
+            if (err) {
+                console.error(err);
+                process.exit(1);
+              }
+              console.log(`Server listening at ${address}`);
+        });
     } catch (error) {
         console.error('Unable to connect to the database:', error);   
         process.exit(1);
