@@ -1,5 +1,5 @@
 const fastify = require("fastify")({ logger: true });
- const sequilize = require("./config/database");
+const sequilize = require("./config/database");
 require('dotenv').config();
 
 // Plugins for security and static file serving
@@ -21,6 +21,7 @@ const startServer = async () => {
                 }
                 callback(new Error("Not allowed by CORS"));
             },
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
             credentials: true,
         });
 
@@ -36,6 +37,7 @@ const startServer = async () => {
                 },
             },
         });
+
         // Register routes for the API
         fastify.register(require('./routes/terms'));
         fastify.register(require('./routes/products'));
@@ -51,15 +53,15 @@ const startServer = async () => {
         console.log("Tables synced");
 
         // Start the server
-        fastify.listen({ port: PORT,  host: '0.0.0.0' }, (err, address) => {
+        fastify.listen({ port: PORT, host: '0.0.0.0' }, (err, address) => {
             if (err) {
                 console.error(err);
                 process.exit(1);
-              }
-              console.log(`Server listening at ${address}`);
+            }
+            console.log(`Server listening at ${address}`);
         });
     } catch (error) {
-        console.error('Unable to connect to the database:', error);   
+        console.error('Unable to connect to the database:', error);
         process.exit(1);
     }
 }
