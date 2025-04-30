@@ -15,7 +15,8 @@ const startServer = async () => {
         await fastify.register(fastifyCors, {
             origin: (origin, callback) => {
                 if (!origin) return callback(null, true);
-                if (ALLOWED_ORIGINS.includes(origin)) {
+                const cleanOrigin = origin.replace(/\/$/, '');
+                if (ALLOWED_ORIGINS.includes(cleanOrigin)) {
                     return callback(null, true);
                 }
                 callback(new Error("Not allowed by CORS"));
